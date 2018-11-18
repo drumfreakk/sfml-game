@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.7)
-project(sfml-app)
+project(sfml-game)
 
 file(GLOB SOURCES
         "*.h"
@@ -10,7 +10,7 @@ file(GLOB SOURCES
 set(CMAKE_CXX_STANDARD 11)
 
 set(SOURCE_FILES main.cpp blocks.cpp)
-add_executable(sfml-app ${SOURCE_FILES})
+add_executable(game ${SOURCE_FILES})
 #add_executable(sfml-app main.cpp blocks.cpp)
 
 # Detect and add SFML
