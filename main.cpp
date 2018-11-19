@@ -1,6 +1,8 @@
-//#include <SFML/Graphics.hpp>
+#include <SFML/Graphics.hpp>
 
 #include "blocks.h"
+
+#include <iostream>
 
 
 
@@ -42,16 +44,14 @@ int main() {
 	player.setTextureRect(sf::IntRect(0, 0, 20, 20));
 	player.setOrigin(10.f, 10.f);
 
-
-	sf::Sprite block[mBlock];
+	Block block[mBlock];
 
 	for(int x = 0; x < mBlock; x++) {
 		block[x].setTexture(texture);
 		block[x].setTextureRect(sf::IntRect(20, 0, 20, 20));
-//	block.scale((blocksizex / 20), (blocksizey / 20));
+//		block.scale((blocksizex / 20), (blocksizey / 20));
 		block[x].setOrigin((blocksizex / 2), (blocksizey / 2));
-		//block[x].move(sf::Vector2f(100.f, 100.f));
-		block[x].move(blockPs[x]);
+		block[x].setPosition(blockPs[x]);
 	}
 
 	while (window.isOpen())

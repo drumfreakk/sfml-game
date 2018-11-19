@@ -6,11 +6,15 @@
 class Block : public sf::Sprite
 {
 private:
-	sf::Vector2f pos;
+	sf::Vector2f speed;
 public:
-	Block(sf::Vector2f x)
-		:pos(x)
-	{}
+	Block(){}
+
+	void setSpeed(sf::Vector2f sp);
+
+	sf::Vector2f getSpeed();
+
+	void defMove();
 
 };
 
