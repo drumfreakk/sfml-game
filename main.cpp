@@ -12,45 +12,41 @@ const int mBlock = 4;
 float mvspeed = 10.0;
 sf::Vector2f blockPs[mBlock] = {sf::Vector2f(100.f, 100.f), sf::Vector2f(120.f, 100.f), sf::Vector2f(140.f, 100.f), sf::Vector2f(160.f, 100.f)};
 
-int blocksizex = 20;
-int blocksizey = 20;
-int playersizex = 20;
-int playersizey = 20;
-
 
 
 /** UNEDITABLE VARIABLES & CODE **/
 
 sf::Vector2f playerPos;
-sf::Vector2f blockPos[mBlock];
+sf::Vector2f blockPos;
 
 sf::Vector2f mv;
 
-int xdiff = (blocksizex / 2) + (playersizex / 2);
-int ydiff = (blocksizey / 2) + (playersizey / 2);
-
 bool toMv = false;
+
 
 int main() {
 //    sf::RenderWindow window(sf::VideoMode(1360, 768), "My window", sf::Style::Fullscreen);
-	sf::RenderWindow window(sf::VideoMode(600, 600), "my game");
+	sf::RenderWindow window(sf::VideoMode(600, 600), "Epic Game");
 	window.setFramerateLimit(60);
 
 	sf::Texture texture;
 	texture.loadFromFile("/home/kip/CLionProjects/sfml-app/assets/textures.png");
 
-	sf::Sprite player;
+	Block player;
+
 	player.setTexture(texture);
 	player.setTextureRect(sf::IntRect(0, 0, 20, 20));
 	player.setOrigin(10.f, 10.f);
+	player.storeSize(20, 20);
 
 	Block block[mBlock];
 
 	for(int x = 0; x < mBlock; x++) {
 		block[x].setTexture(texture);
 		block[x].setTextureRect(sf::IntRect(20, 0, 20, 20));
-//		block.scale((blocksizex / 20), (blocksizey / 20));
-		block[x].setOrigin((blocksizex / 2), (blocksizey / 2));
+
+		block[x].storeSize(20, 20);
+		block[x].setOrigin((block[x].getSize().x / 2), (block[x].getSize().y / 2));
 		block[x].setPosition(blockPs[x]);
 	}
 
@@ -93,12 +89,15 @@ int main() {
 
 		toMv = false;
 
-		for(int x = 0; x < mBlock; x++) {
-			blockPos[x].x = block[x].getPosition().x;
-			blockPos[x].y = block[x].getPosition().y;
+		for(Block bl : block) {
+			blockPos.x = bl.getPosition().x;
+			blockPos.y = bl.getPosition().y;
 
-			if ((playerPos.x > (blockPos[x].x - xdiff)) && (playerPos.x < (blockPos[x].x + xdiff)) &&
-				(playerPos.y > (blockPos[x].y - ydiff)) && (playerPos.y < (blockPos[x].y + ydiff))) {
+			float xdiff = (bl.getSize().x / 2) + (player.getSize().x / 2);
+			float ydiff = (bl.getSize().y / 2) + (player.getSize().y / 2);
+
+			if ((playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
+				(playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff))) {
 
 				toMv = true;
 
@@ -113,8 +112,8 @@ int main() {
 		}
 
 		window.draw(player);
-		for(int x = 0; x < mBlock; x++) {
-			window.draw(block[x]);
+		for(const Block &todraw : block){
+			window.draw(todraw);
 		}
 		window.display();
 	}

@@ -7,6 +7,7 @@ class Block : public sf::Sprite
 {
 private:
 	sf::Vector2f speed;
+	sf::Vector2f size;
 public:
 	Block(){}
 
@@ -15,6 +16,13 @@ public:
 	sf::Vector2f getSpeed();
 
 	void defMove();
+
+	void setSize(int x, int y, int orX, int orY);
+
+	void storeSize(int x, int y);
+
+
+	sf::Vector2f getSize();
 
 };
 
