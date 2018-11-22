@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.12)
-project(sfml_game)
+project(sfml-game)
 
 set(CMAKE_CXX_STANDARD 14)
 
 include_directories(.)
 
-add_executable(sfml_game
+add_executable(sfml-game
         blocks.cpp
         blocks.h
         main.cpp)

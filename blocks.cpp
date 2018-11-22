@@ -8,12 +8,20 @@ void Block::setSpeed(sf::Vector2f sp){
 	Block::speed = sp;
 }
 
+void Block::setSpeed(float sp){
+	Block::mvSpeed = sp;
+}
+
+float Block::getMvSpeed() {
+	return Block::mvSpeed;
+}
+
 sf::Vector2f Block::getSpeed(){
 	return Block::speed;
 }
 
 void Block::defMove(){
-	sf::Sprite::move(Block::speed);
+	Block::move(Block::speed);
 }
 
 void Block::setSize(int x, int y, int orX, int orY){
