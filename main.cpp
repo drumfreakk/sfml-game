@@ -1,30 +1,40 @@
 #include <SFML/Graphics.hpp>
-
 #include "blocks.h"
-
 #include <iostream>
 
 
-
-/** EDITABLE VARIABLES **/
+/// variables for the fixed blocks: amount and positions
 
 const int mBlock = 4;
 sf::Vector2f blockPs[mBlock] = {sf::Vector2f(100.f, 100.f), sf::Vector2f(120.f, 100.f), sf::Vector2f(140.f, 100.f), sf::Vector2f(160.f, 100.f)};
 
+
+/// variables for the moving blocks: amount, starting positions, amount of steps and the amount of steps taken at this point
+
 const int mMvBlock = 1;
-sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(200.f, 200.f)};
+sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f)};
+int mSteps = 1000;
+int steps = 0;
 
 
-
-/** UNEDITABLE VARIABLES & CODE **/
+/// main loop
 
 int main() {
-//    sf::RenderWindow window(sf::VideoMode(1360, 768), "My window", sf::Style::Fullscreen);
+
+
+	/// open the window
+
 	sf::RenderWindow window(sf::VideoMode(600, 600), "Epic Game");
 	window.setFramerateLimit(500);
 
+
+	/// load the textures
+
 	sf::Texture texture;
 	texture.loadFromFile("/home/kip/CLionProjects/sfml-game/assets/textures.png");
+
+
+	/// initialize the player
 
 	Block player;
 
@@ -33,6 +43,9 @@ int main() {
 	player.setOrigin(10.f, 10.f);
 	player.storeSize(20, 20);
 	player.setSpeed(2.0);
+
+
+	/// initialize the fixed blocks
 
 	Block fixedBlock[mBlock];
 
@@ -44,7 +57,10 @@ int main() {
 		fixedBlock[x].setOrigin((fixedBlock[x].getSize().x / 2), (fixedBlock[x].getSize().y / 2));
 		fixedBlock[x].setPosition(blockPs[x]);
 	}
-//TODO: fix stuf
+
+
+	/// initialize the movable blocks
+
 	Block mvBlock[mMvBlock];
 
 	for(int x = 0; x < mMvBlock; x++){
@@ -54,24 +70,26 @@ int main() {
 		mvBlock[x].storeSize(20, 20);
 		mvBlock[x].setOrigin((mvBlock[x].getSize().x / 2), (mvBlock[x].getSize().y / 2));
 		mvBlock[x].setPosition(mvBlockPs[x]);
-		mvBlock[x].setSpeed(sf::Vector2f(20.f, 0.f));
+		mvBlock[x].setSpeed(sf::Vector2f(0.1, 0.f));
 	}
-	
-	sf::Vector2f playerPos;
-	sf::Vector2f blockPos;
+
+
+	/// initialize some general variables
 
 	float mvspeed = player.getMvSpeed();
 
 	sf::Vector2f mv;
 
 	bool toMv = false;
-//TODO: fix stuf
-	for(Block bl : mvBlock){
-		std::cout << bl.getSpeed().x << " " << bl.getSpeed().y << std::endl;
-	}
+
+
+	/// this is run while the game runs
 
 	while (window.isOpen())
 	{
+
+		/// clear the screen and check if the window is closed
+
 		sf::Event event;
 		while (window.pollEvent(event))
 		{
@@ -80,9 +98,14 @@ int main() {
 		}
 		window.clear(sf::Color::Black);
 
+
+		/// detect user input and act so
+		/// mv is to store how you moved to move you back if a collision is detected
+
 		mv.x = 0.f;
 		mv.y = 0.f;
 
+		/// keyboard input
 		if (event.type == sf::Event::TextEntered){
 			if (event.text.unicode < 128){
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
@@ -105,51 +128,44 @@ int main() {
 		}
 
 
-		//TODO: fix stuf
-		for(Block bl : mvBlock){
-			bl.defMove();
+		/// move the movable blocks
+
+		for(int x = 0; x < mMvBlock; x++){
+			if(steps < mSteps) {
+				mvBlock[x].defMove();
+				steps++;
+			}else{
+				mvBlock[x].setSpeed(sf::Vector2f(-mvBlock[x].getSpeed().x, -mvBlock[x].getSpeed().y));
+				steps = 0;
+			}
 		}
 
-		playerPos.x = player.getPosition().x;
-		playerPos.y = player.getPosition().y;
+
+		/// check collisions
 
 		toMv = false;
 
-		for(Block bl : fixedBlock) {
-			blockPos.x = bl.getPosition().x;
-			blockPos.y = bl.getPosition().y;
-
-			float xdiff = (bl.getSize().x / 2) + (player.getSize().x / 2);
-			float ydiff = (bl.getSize().y / 2) + (player.getSize().y / 2);
-
-			if ((playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
-				(playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff))) {
-
+		for(Block bl : fixedBlock){
+			if(bl.colliding(player)){
 				toMv = true;
-
 			}
 		}
 		for(Block bl : mvBlock){
-			blockPos.x = bl.getPosition().x;
-			blockPos.y = bl.getPosition().y;
-
-			float xdiff = (bl.getSize().x / 2) + (player.getSize().x / 2);
-			float ydiff = (bl.getSize().y / 2) + (player.getSize().y / 2);
-
-			if ((playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
-				(playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff))) {
-
+			if(bl.colliding(player)){
 				toMv = true;
-
 			}
 		}
 
+		/// move player out of harms way if collisions were detected
 		if(toMv){
 			mv.x = mv.x * -1.f;
 			mv.y = mv.y * -1.f;
 
 			player.move(mv);
 		}
+
+
+		/// draw objects
 
 		window.draw(player);
 		for(const Block &todraw : fixedBlock){
@@ -158,8 +174,15 @@ int main() {
 		for(const Block &todraw : mvBlock){
 			window.draw(todraw);
 		}
+
+
+		/// display everything on the window
+
 		window.display();
 	}
+
+
+	/// close the program
 
 	return 0;
 }
