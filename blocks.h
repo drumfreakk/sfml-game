@@ -40,6 +40,8 @@ public:
 	/// is the block colliding with another block
 	bool colliding(Block &player);
 
+	bool colliding(Block &player, int margin);
+
 };
 
 #endif

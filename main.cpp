@@ -70,7 +70,7 @@ int main() {
 		mvBlock[x].storeSize(20, 20);
 		mvBlock[x].setOrigin((mvBlock[x].getSize().x / 2), (mvBlock[x].getSize().y / 2));
 		mvBlock[x].setPosition(mvBlockPs[x]);
-		mvBlock[x].setSpeed(sf::Vector2f(0.1, 0.f));
+		mvBlock[x].setSpeed(sf::Vector2f(0.1, 0.1));
 	}
 
 
@@ -153,6 +153,9 @@ int main() {
 		for(Block bl : mvBlock){
 			if(bl.colliding(player)){
 				toMv = true;
+			}
+			if (bl.colliding(player, 1) && (((bl.getSpeed().x > 0) && (player.getPosition().x > bl.getPosition().x)) || ((bl.getSpeed().x < 0) && (player.getPosition().x < bl.getPosition().x)) || ((bl.getSpeed().y > 0) && (player.getPosition().y > bl.getPosition().y)) || ((bl.getSpeed().y < 0) && (player.getPosition().y < bl.getPosition().y)))) {
+				player.move(bl.getSpeed());
 			}
 		}
 

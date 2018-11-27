@@ -51,3 +51,18 @@ bool Block::colliding(Block &player){
 	}
 	return false;
 }
+
+bool Block::colliding(Block &player, int margin){
+	sf::Vector2f blockPos = Block::getPosition();
+	sf::Vector2f playerPos = player.getPosition();
+
+	float xdiff = (Block::getSize().x / 2) + (player.getSize().x / 2) + margin;
+	float ydiff = (Block::getSize().y / 2) + (player.getSize().y / 2) + margin;
+
+	if ((playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
+		(playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff))) {
+		return true;
+
+	}
+	return false;
+}
