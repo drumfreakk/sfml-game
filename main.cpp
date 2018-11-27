@@ -154,6 +154,8 @@ int main() {
 			if(bl.colliding(player)){
 				toMv = true;
 			}
+
+			//TODO: clear this up
 			if (bl.colliding(player, 1)) {
 				if (((bl.getSpeed().x > 0) && (player.getPosition().x > bl.getPosition().x)) ||
 					((bl.getSpeed().x < 0) && (player.getPosition().x < bl.getPosition().x)) ||
