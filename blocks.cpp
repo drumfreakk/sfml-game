@@ -63,20 +63,24 @@ float MovingBlock::getMvSpeed() {
 
 /// teleport blocks
 
-void TpSendBlock::linkBlocks(TpBaseBlock &toLink) {
-	if(!TpSendBlock::linked) {
-		TpSendBlock::linkedBlock = toLink;
-		TpSendBlock::linked = true;
+void TpBlock::linkBlocks(Block &toLink) {
+	if(!TpBlock::linked) {
+		TpBlock::linkedBlock = toLink;
+		TpBlock::linked = true;
 	}
 }
 
-void TpSendBlock::unlinkBlocks() {
-	TpSendBlock::linked = false;
+void TpBlock::unlinkBlocks() {
+	TpBlock::linked = false;
 }
 
-void TpSendBlock::teleport(Block &toTeleport) {
-	if(TpSendBlock::linked) {
-		std::cout << TpSendBlock::linkedBlock.getPosition().x << " " << TpSendBlock::linkedBlock.getPosition().y << std::endl;
-		toTeleport.setPosition(TpSendBlock::linkedBlock.getPosition());
+void TpBlock::teleport(Block &toTeleport) {
+	if(TpBlock::linked) {
+		toTeleport.setPosition(TpBlock::linkedBlock.getPosition());
 	}
+}
+
+void TpBlock::teleport(Block &toTeleport, sf::Vector2f &pos){
+	TpBlock::teleport(toTeleport);
+	toTeleport.move(pos);
 }

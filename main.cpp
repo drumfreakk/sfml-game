@@ -16,11 +16,8 @@ sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f)};
 int mSteps = 1000;
 int steps = 0;
 
-const int mTpBlock = 1;
-sf::Vector2f tpBlockPs[mBlock] = {sf::Vector2f(200.f, 200.f)};
-
-const int mTpBBlock = 1;
-sf::Vector2f tpBBlockPs[mBlock] = {sf::Vector2f(400.f, 400.f)};
+const int mTpBlock = 2;
+sf::Vector2f tpBlockPs[mBlock] = {sf::Vector2f(200.f, 200.f), sf::Vector2f(400.f, 400.f)};
 
 /// main loop
 
@@ -82,18 +79,7 @@ int main() {
 
 	/// teleporting blocks
 
-	TpBaseBlock tpBBlock[mTpBBlock];
-
-	for(int x = 0; x < mTpBBlock; x++){
-		tpBBlock[x].setTexture(texture);
-		tpBBlock[x].setTextureRect(sf::IntRect(80, 0, 20, 20));
-
-		tpBBlock[x].storeSize(20, 20);
-		tpBBlock[x].setOrigin((tpBBlock[x].getSize().x / 2), (tpBBlock[x].getSize().y / 2));
-		tpBBlock[x].setPosition(tpBBlockPs[x]);
-	}
-
-	TpSendBlock tpBlock[mTpBlock];
+	TpBlock tpBlock[mTpBlock];
 
 	for(int x = 0; x < mTpBlock; x++){
 		tpBlock[x].setTexture(texture);
@@ -102,9 +88,11 @@ int main() {
 		tpBlock[x].storeSize(20, 20);
 		tpBlock[x].setOrigin((tpBlock[x].getSize().x / 2), (tpBlock[x].getSize().y / 2));
 		tpBlock[x].setPosition(tpBlockPs[x]);
-
-		tpBlock[x].linkBlocks(tpBBlock[0]);
 	}
+
+	tpBlock[0].linkBlocks(tpBlock[1]);
+	tpBlock[1].linkBlocks(tpBlock[0]);
+
 
 
 	/// initialize some general variables
@@ -200,10 +188,13 @@ int main() {
 				}
 			}
 		}
-// TODO: fix this
-		if(tpBlock[0].colliding(player)){
-			toMv = true;
-			tpBlock[0].teleport(player);
+
+		for(auto &block : tpBlock) {
+			if (block.colliding(player)) {
+				toMv = true;
+				block.teleport(player);
+				player.move(0, 20);
+			}
 		}
 
 		/// move player out of harms way if collisions were detected
@@ -227,9 +218,7 @@ int main() {
 		for(const auto &todraw : tpBlock){
 			window.draw(todraw);
 		}
-		for(const auto &todraw : tpBBlock){
-			window.draw(todraw);
-		}
+
 
 
 		/// display everything on the window

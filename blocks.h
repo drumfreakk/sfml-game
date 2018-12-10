@@ -56,25 +56,21 @@ public:
 
 };
 
-class TpBaseBlock : public Block
-{
-public:
-	TpBaseBlock(){};
-};
-
-class TpSendBlock : public TpBaseBlock
+class TpBlock : public Block
 {
 private:
-	TpBaseBlock linkedBlock;
+	Block linkedBlock;
 	bool linked = false;
 public:
-	TpSendBlock(){};
+	TpBlock(){};
 
-	void linkBlocks(TpBaseBlock &toLink);
+	void linkBlocks(Block &toLink);
 
 	void unlinkBlocks();
 
 	void teleport(Block &toTeleport);
+
+	void teleport(Block &toTeleport, sf::Vector2f &pos);
 };
 
 #endif
