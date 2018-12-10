@@ -3,40 +3,29 @@
 #include <iostream>
 
 
-/// variables for the fixed blocks: amount and positions
-
 const int mBlock = 6;
 sf::Vector2f blockPs[mBlock] = {sf::Vector2f(100.f, 100.f), sf::Vector2f(120.f, 100.f), sf::Vector2f(140.f, 100.f), sf::Vector2f(160.f, 100.f), sf::Vector2f(130.f, 120.f), sf::Vector2f(130.f, 140.f)};
 
 
-/// variables for the moving blocks: amount, starting positions, amount of steps and the amount of steps taken at this point
-
-const int mMvBlock = 1;
-sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f)};
-int mSteps = 1000;
-int steps = 0;
+const int mMvBlock = 2;
+sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f), sf::Vector2f(200.f, 200.f)};
+int mSteps[mMvBlock] = {1000, 1000};
+int steps[mMvBlock] = {0, 0};
 
 const int mTpBlock = 2;
 sf::Vector2f tpBlockPs[mBlock] = {sf::Vector2f(200.f, 200.f), sf::Vector2f(400.f, 400.f)};
 
-/// main loop
 
 int main() {
 
 
-	/// open the window
 
 	sf::RenderWindow window(sf::VideoMode(600, 600), "Epic Game");
 	window.setFramerateLimit(500);
 
-
-	/// load the textures
-
 	sf::Texture texture;
 	texture.loadFromFile("/home/kip/CLionProjects/sfml-game/assets/textures.png");
 
-
-	/// initialize the player
 
 	MovingBlock player;
 
@@ -47,8 +36,6 @@ int main() {
 	player.setSpeed(2.0);
 	player.setPosition(10, 10);
 
-
-	/// initialize the fixed blocks
 
 	Block fixedBlock[mBlock];
 
@@ -62,7 +49,6 @@ int main() {
 	}
 
 
-	/// initialize the movable blocks
 
 	MovingBlock mvBlock[mMvBlock];
 
@@ -75,9 +61,6 @@ int main() {
 		mvBlock[x].setPosition(mvBlockPs[x]);
 		mvBlock[x].setSpeed(sf::Vector2f(0.1, 0.f));
 	}
-
-
-	/// teleporting blocks
 
 	TpBlock tpBlock[mTpBlock];
 
@@ -94,9 +77,6 @@ int main() {
 	tpBlock[1].linkBlocks(tpBlock[0]);
 
 
-
-	/// initialize some general variables
-
 	float mvspeed = player.getMvSpeed();
 
 	sf::Vector2f mv;
@@ -104,12 +84,9 @@ int main() {
 	bool toMv;
 
 
-	/// this is run while the game runs
-
 	while (window.isOpen())
 	{
 
-		/// clear the screen and check if the window is closed
 
 		sf::Event event;
 		while (window.pollEvent(event))
@@ -119,14 +96,9 @@ int main() {
 		}
 		window.clear(sf::Color::Black);
 
-
-		/// detect user input and act so
-		/// mv is to store how you moved to move you back if a collision is detected
-
 		mv.x = 0.f;
 		mv.y = 0.f;
 
-		/// keyboard input
 		if (event.type == sf::Event::TextEntered){
 			if (event.text.unicode < 128){
 				if(sf::Keyboard::isKeyPressed(sf::Keyboard::W)){
@@ -149,21 +121,16 @@ int main() {
 		}
 
 
-
-		/// move the movable blocks
-
 		for(int x = 0; x < mMvBlock; x++){
-			if(steps < mSteps) {
+			if(steps[x] < mSteps[x]) {
 				mvBlock[x].defMove();
-				steps++;
+				steps[x]++;
 			}else{
 				mvBlock[x].setSpeed(sf::Vector2f(-mvBlock[x].getSpeed().x, -mvBlock[x].getSpeed().y));
-				steps = 0;
+				steps[x] = 0;
 			}
 		}
 
-
-		/// check collisions
 
 		toMv = false;
 
@@ -179,7 +146,6 @@ int main() {
 
 			//TODO: clear this up
 			if (bl.colliding(player, 1)) {
-				/// if player is in front of the block
 				if (((bl.getSpeed().x > 0) && (player.getPosition().x > bl.getPosition().x)) ||
 					((bl.getSpeed().x < 0) && (player.getPosition().x < bl.getPosition().x)) ||
 					((bl.getSpeed().y > 0) && (player.getPosition().y > bl.getPosition().y)) ||
@@ -197,16 +163,13 @@ int main() {
 			}
 		}
 
-		/// move player out of harms way if collisions were detected
+
 		if(toMv){
 			mv.x = mv.x * -1.f;
 			mv.y = mv.y * -1.f;
 
 			player.move(mv);
 		}
-
-
-		/// draw objects
 
 		window.draw(player);
 		for(const auto &todraw : fixedBlock){
@@ -220,14 +183,9 @@ int main() {
 		}
 
 
-
-		/// display everything on the window
-
 		window.display();
 	}
 
-
-	/// close the program
 
 	return 0;
 }
