@@ -3,30 +3,15 @@
 
 #include <SFML/Graphics.hpp>
 
+#include <iostream>
+
 class Block : public sf::Sprite
 {
 private:
-	sf::Vector2f speed;
 	sf::Vector2f size;
-	float mvSpeed;
 
 public:
 	Block(){}
-
-	/// set a speed for a constant moving block
-	void setSpeed(sf::Vector2f sp);
-
-	/// set the speed for a non constant moving block
-	void setSpeed(float sp);
-
-	/// get the constant moving speed
-	sf::Vector2f getSpeed();
-
-	/// get the non constant moving block speed
-	float getMvSpeed();
-
-	/// move the block the constant moving speed
-	void defMove();
 
 	/// set the blocks size
 	void setSize(int x, int y, int orX, int orY);
@@ -42,6 +27,54 @@ public:
 
 	bool colliding(Block &player, int margin);
 
+};
+
+class MovingBlock : public Block
+{
+private:
+	sf::Vector2f speed;
+	float mvSpeed;
+
+public:
+	MovingBlock(){}
+
+	/// set a speed for a constant moving block
+	void setSpeed(sf::Vector2f sp);
+
+	/// get the constant moving speed
+	sf::Vector2f getSpeed();
+
+	/// move the block the constant moving speed
+	void defMove();
+
+	/// set the speed for a non constant moving block
+	void setSpeed(float sp);
+
+
+	/// get the non constant moving block speed
+	float getMvSpeed();
+
+};
+
+class TpBaseBlock : public Block
+{
+public:
+	TpBaseBlock(){};
+};
+
+class TpSendBlock : public TpBaseBlock
+{
+private:
+	TpBaseBlock linkedBlock;
+	bool linked = false;
+public:
+	TpSendBlock(){};
+
+	void linkBlocks(TpBaseBlock &toLink);
+
+	void unlinkBlocks();
+
+	void teleport(Block &toTeleport);
 };
 
 #endif

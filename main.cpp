@@ -5,8 +5,8 @@
 
 /// variables for the fixed blocks: amount and positions
 
-const int mBlock = 4;
-sf::Vector2f blockPs[mBlock] = {sf::Vector2f(100.f, 100.f), sf::Vector2f(120.f, 100.f), sf::Vector2f(140.f, 100.f), sf::Vector2f(160.f, 100.f)};
+const int mBlock = 6;
+sf::Vector2f blockPs[mBlock] = {sf::Vector2f(100.f, 100.f), sf::Vector2f(120.f, 100.f), sf::Vector2f(140.f, 100.f), sf::Vector2f(160.f, 100.f), sf::Vector2f(130.f, 120.f), sf::Vector2f(130.f, 140.f)};
 
 
 /// variables for the moving blocks: amount, starting positions, amount of steps and the amount of steps taken at this point
@@ -16,6 +16,11 @@ sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f)};
 int mSteps = 1000;
 int steps = 0;
 
+const int mTpBlock = 1;
+sf::Vector2f tpBlockPs[mBlock] = {sf::Vector2f(200.f, 200.f)};
+
+const int mTpBBlock = 1;
+sf::Vector2f tpBBlockPs[mBlock] = {sf::Vector2f(400.f, 400.f)};
 
 /// main loop
 
@@ -36,13 +41,14 @@ int main() {
 
 	/// initialize the player
 
-	Block player;
+	MovingBlock player;
 
 	player.setTexture(texture);
 	player.setTextureRect(sf::IntRect(0, 0, 20, 20));
 	player.setOrigin(10.f, 10.f);
 	player.storeSize(20, 20);
 	player.setSpeed(2.0);
+	player.setPosition(10, 10);
 
 
 	/// initialize the fixed blocks
@@ -61,7 +67,7 @@ int main() {
 
 	/// initialize the movable blocks
 
-	Block mvBlock[mMvBlock];
+	MovingBlock mvBlock[mMvBlock];
 
 	for(int x = 0; x < mMvBlock; x++){
 		mvBlock[x].setTexture(texture);
@@ -74,13 +80,40 @@ int main() {
 	}
 
 
+	/// teleporting blocks
+
+	TpBaseBlock tpBBlock[mTpBBlock];
+
+	for(int x = 0; x < mTpBBlock; x++){
+		tpBBlock[x].setTexture(texture);
+		tpBBlock[x].setTextureRect(sf::IntRect(80, 0, 20, 20));
+
+		tpBBlock[x].storeSize(20, 20);
+		tpBBlock[x].setOrigin((tpBBlock[x].getSize().x / 2), (tpBBlock[x].getSize().y / 2));
+		tpBBlock[x].setPosition(tpBBlockPs[x]);
+	}
+
+	TpSendBlock tpBlock[mTpBlock];
+
+	for(int x = 0; x < mTpBlock; x++){
+		tpBlock[x].setTexture(texture);
+		tpBlock[x].setTextureRect(sf::IntRect(80, 0, 20, 20));
+
+		tpBlock[x].storeSize(20, 20);
+		tpBlock[x].setOrigin((tpBlock[x].getSize().x / 2), (tpBlock[x].getSize().y / 2));
+		tpBlock[x].setPosition(tpBlockPs[x]);
+
+		tpBlock[x].linkBlocks(tpBBlock[0]);
+	}
+
+
 	/// initialize some general variables
 
 	float mvspeed = player.getMvSpeed();
 
 	sf::Vector2f mv;
 
-	bool toMv = false;
+	bool toMv;
 
 
 	/// this is run while the game runs
@@ -128,6 +161,7 @@ int main() {
 		}
 
 
+
 		/// move the movable blocks
 
 		for(int x = 0; x < mMvBlock; x++){
@@ -145,18 +179,19 @@ int main() {
 
 		toMv = false;
 
-		for(Block bl : fixedBlock){
+		for(auto bl : fixedBlock){
 			if(bl.colliding(player)){
 				toMv = true;
 			}
 		}
-		for(Block bl : mvBlock){
+		for(auto bl : mvBlock){
 			if(bl.colliding(player)){
 				toMv = true;
 			}
 
 			//TODO: clear this up
 			if (bl.colliding(player, 1)) {
+				/// if player is in front of the block
 				if (((bl.getSpeed().x > 0) && (player.getPosition().x > bl.getPosition().x)) ||
 					((bl.getSpeed().x < 0) && (player.getPosition().x < bl.getPosition().x)) ||
 					((bl.getSpeed().y > 0) && (player.getPosition().y > bl.getPosition().y)) ||
@@ -164,6 +199,11 @@ int main() {
 					player.move(bl.getSpeed());
 				}
 			}
+		}
+// TODO: fix this
+		if(tpBlock[0].colliding(player)){
+			toMv = true;
+			tpBlock[0].teleport(player);
 		}
 
 		/// move player out of harms way if collisions were detected
@@ -178,10 +218,16 @@ int main() {
 		/// draw objects
 
 		window.draw(player);
-		for(const Block &todraw : fixedBlock){
+		for(const auto &todraw : fixedBlock){
 			window.draw(todraw);
 		}
-		for(const Block &todraw : mvBlock){
+		for(const auto &todraw : mvBlock){
+			window.draw(todraw);
+		}
+		for(const auto &todraw : tpBlock){
+			window.draw(todraw);
+		}
+		for(const auto &todraw : tpBBlock){
 			window.draw(todraw);
 		}
 

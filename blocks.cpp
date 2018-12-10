@@ -1,28 +1,7 @@
 #include "blocks.h"
-
 #include <iostream>
-
 #include <SFML/Graphics.hpp>
 
-void Block::setSpeed(sf::Vector2f sp){
-	Block::speed = sp;
-}
-
-void Block::setSpeed(float sp){
-	Block::mvSpeed = sp;
-}
-
-float Block::getMvSpeed() {
-	return Block::mvSpeed;
-}
-
-sf::Vector2f Block::getSpeed(){
-	return Block::speed;
-}
-
-void Block::defMove(){
-	Block::move(Block::speed);
-}
 
 void Block::setSize(int x, int y, int orX, int orY){
 	Block::size = sf::Vector2f(x, y);
@@ -44,12 +23,8 @@ bool Block::colliding(Block &player){
 	float xdiff = (Block::getSize().x / 2) + (player.getSize().x / 2);
 	float ydiff = (Block::getSize().y / 2) + (player.getSize().y / 2);
 
-	if ((playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
-		(playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff))) {
-		return true;
-
-	}
-	return false;
+	return (playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
+		   (playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff));
 }
 
 bool Block::colliding(Block &player, int margin){
@@ -59,10 +34,49 @@ bool Block::colliding(Block &player, int margin){
 	float xdiff = (Block::getSize().x / 2) + (player.getSize().x / 2) + margin;
 	float ydiff = (Block::getSize().y / 2) + (player.getSize().y / 2) + margin;
 
-	if ((playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
-		(playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff))) {
-		return true;
+	return (playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
+		   (playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff));
+}
 
+
+/// moving blocks
+
+sf::Vector2f MovingBlock::getSpeed(){
+	return MovingBlock::speed;
+}
+
+void MovingBlock::defMove(){
+	MovingBlock::move(MovingBlock::speed);
+}
+
+void MovingBlock::setSpeed(sf::Vector2f sp){
+	MovingBlock::speed = sp;
+}
+
+void MovingBlock::setSpeed(float sp){
+	MovingBlock::mvSpeed = sp;
+}
+
+float MovingBlock::getMvSpeed() {
+	return MovingBlock::mvSpeed;
+}
+
+/// teleport blocks
+
+void TpSendBlock::linkBlocks(TpBaseBlock &toLink) {
+	if(!TpSendBlock::linked) {
+		TpSendBlock::linkedBlock = toLink;
+		TpSendBlock::linked = true;
 	}
-	return false;
+}
+
+void TpSendBlock::unlinkBlocks() {
+	TpSendBlock::linked = false;
+}
+
+void TpSendBlock::teleport(Block &toTeleport) {
+	if(TpSendBlock::linked) {
+		std::cout << TpSendBlock::linkedBlock.getPosition().x << " " << TpSendBlock::linkedBlock.getPosition().y << std::endl;
+		toTeleport.setPosition(TpSendBlock::linkedBlock.getPosition());
+	}
 }
