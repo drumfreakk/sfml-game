@@ -144,12 +144,11 @@ int main() {
 				toMv = true;
 			}
 
-			//TODO: clear this up
 			if (bl.colliding(player, 1)) {
-				if (((bl.getSpeed().x > 0) && (player.getPosition().x > bl.getPosition().x)) ||
-					((bl.getSpeed().x < 0) && (player.getPosition().x < bl.getPosition().x)) ||
-					((bl.getSpeed().y > 0) && (player.getPosition().y > bl.getPosition().y)) ||
-					((bl.getSpeed().y < 0) && (player.getPosition().y < bl.getPosition().y))) {
+				if (bl.getSpeed().x > 0 && player.getPosition().x > bl.getPosition().x ||
+					bl.getSpeed().x < 0 && player.getPosition().x < bl.getPosition().x ||
+					bl.getSpeed().y > 0 && player.getPosition().y > bl.getPosition().y ||
+					bl.getSpeed().y < 0 && player.getPosition().y < bl.getPosition().y) {
 					player.move(bl.getSpeed());
 				}
 			}

@@ -23,8 +23,8 @@ bool Block::colliding(Block &player){
 	float xdiff = (Block::getSize().x / 2) + (player.getSize().x / 2);
 	float ydiff = (Block::getSize().y / 2) + (player.getSize().y / 2);
 
-	return (playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
-		   (playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff));
+	return playerPos.x > blockPos.x - xdiff && playerPos.x < blockPos.x + xdiff &&
+		   playerPos.y > blockPos.y - ydiff && playerPos.y < blockPos.y + ydiff;
 }
 
 bool Block::colliding(Block &player, int margin){
@@ -34,8 +34,8 @@ bool Block::colliding(Block &player, int margin){
 	float xdiff = (Block::getSize().x / 2) + (player.getSize().x / 2) + margin;
 	float ydiff = (Block::getSize().y / 2) + (player.getSize().y / 2) + margin;
 
-	return (playerPos.x > (blockPos.x - xdiff)) && (playerPos.x < (blockPos.x + xdiff)) &&
-		   (playerPos.y > (blockPos.y - ydiff)) && (playerPos.y < (blockPos.y + ydiff));
+	return playerPos.x > blockPos.x - xdiff && playerPos.x < blockPos.x + xdiff &&
+		   playerPos.y > blockPos.y - ydiff && playerPos.y < blockPos.y + ydiff;
 }
 
 
