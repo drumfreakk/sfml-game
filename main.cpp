@@ -8,7 +8,7 @@ sf::Vector2f blockPs[mBlock] = {sf::Vector2f(100.f, 100.f), sf::Vector2f(120.f, 
 
 
 const int mMvBlock = 2;
-sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f), sf::Vector2f(200.f, 200.f)};
+sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f), sf::Vector2f(250.f, 200.f)};
 int mSteps[mMvBlock] = {1000, 1000};
 int steps[mMvBlock] = {0, 0};
 
@@ -59,7 +59,7 @@ int main() {
 		mvBlock[x].storeSize(20, 20);
 		mvBlock[x].setOrigin((mvBlock[x].getSize().x / 2), (mvBlock[x].getSize().y / 2));
 		mvBlock[x].setPosition(mvBlockPs[x]);
-		mvBlock[x].setSpeed(sf::Vector2f(0.1, 0.f));
+		mvBlock[x].setSpeed(sf::Vector2f(0.5, 0.f));
 	}
 
 	TpBlock tpBlock[mTpBlock];
@@ -83,6 +83,7 @@ int main() {
 
 	bool toMv;
 
+	bool tpAble = true;
 
 	while (window.isOpen())
 	{
@@ -154,11 +155,19 @@ int main() {
 			}
 		}
 
-		for(auto &block : tpBlock) {
-			if (block.colliding(player)) {
-				toMv = true;
-				block.teleport(player);
-				player.move(0, 20);
+		for(int x = 0; x < mTpBlock; x++) {
+			int setTpAble = 0;
+			for(int y = 0; y < mTpBlock; y++) {
+				if (!tpAble && !tpBlock[y].colliding(player)) {
+					setTpAble++;
+				}
+			}
+			if(setTpAble > mTpBlock -1){
+				tpAble = true;
+			}
+			if (tpBlock[x].colliding(player) && tpAble) {
+				tpAble = false;
+				tpBlock[x].teleport(player);
 			}
 		}
 
