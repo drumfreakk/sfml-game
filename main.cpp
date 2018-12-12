@@ -15,6 +15,7 @@ int steps[mMvBlock] = {0, 0, 0, 0};
 const int mTpBlock = 2;
 sf::Vector2f tpBlockPs[mBlock] = {sf::Vector2f(200.f, 200.f), sf::Vector2f(400.f, 400.f)};
 
+
 int main() {
 
 	sf::RenderWindow window(sf::VideoMode(600, 600), "Epic Game");
