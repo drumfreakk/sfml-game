@@ -34,7 +34,7 @@ int main() {
 	player.setSpeed(2.0);
 	player.setPosition(10, 10);
 
-
+	
 	Block fixedBlock[mBlock];
 
 	for(int x = 0; x < mBlock; x++) {
