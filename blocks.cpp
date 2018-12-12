@@ -38,7 +38,6 @@ bool Block::colliding(Block &player, int margin){
 		   playerPos.y > blockPos.y - ydiff && playerPos.y < blockPos.y + ydiff;
 }
 
-
 /// moving blocks
 
 sf::Vector2f MovingBlock::getSpeed(){

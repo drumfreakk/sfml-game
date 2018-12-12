@@ -7,18 +7,15 @@ const int mBlock = 6;
 sf::Vector2f blockPs[mBlock] = {sf::Vector2f(100.f, 100.f), sf::Vector2f(120.f, 100.f), sf::Vector2f(140.f, 100.f), sf::Vector2f(160.f, 100.f), sf::Vector2f(130.f, 120.f), sf::Vector2f(130.f, 140.f)};
 
 
-const int mMvBlock = 2;
-sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 200.f), sf::Vector2f(250.f, 200.f)};
-int mSteps[mMvBlock] = {1000, 1000};
-int steps[mMvBlock] = {0, 0};
+const int mMvBlock = 4;
+sf::Vector2f mvBlockPs[mMvBlock] = {sf::Vector2f(100.f, 250.f), sf::Vector2f(250.f, 250.f), sf::Vector2f(270.f, 250.f), sf::Vector2f(270.f, 270.f)};
+int mSteps[mMvBlock] = {500, 1000, 1000, 1000};
+int steps[mMvBlock] = {0, 0, 0, 0};
 
 const int mTpBlock = 2;
 sf::Vector2f tpBlockPs[mBlock] = {sf::Vector2f(200.f, 200.f), sf::Vector2f(400.f, 400.f)};
 
-
 int main() {
-
-
 
 	sf::RenderWindow window(sf::VideoMode(600, 600), "Epic Game");
 	window.setFramerateLimit(500);
