@@ -24,7 +24,7 @@ int main() {
 	sf::Texture texture;
 	texture.loadFromFile("/home/kip/CLionProjects/sfml-game/assets/textures.png");
 
-
+/*
 	MovingBlock player;
 
 	player.setTexture(texture);
@@ -33,8 +33,20 @@ int main() {
 	player.storeSize(20, 20);
 	player.setSpeed(2.0);
 	player.setPosition(10, 10);
+*/
 
-	
+	Entity player;
+
+	MovingBlock &mPlayer = player.main;
+	MovingBlock &hPlayer = player.hitbox;
+
+	mPlayer.setTexture(texture);
+	mPlayer.setTextureRect(sf::IntRect(0, 0, 20, 20));
+	player.setOrigin(10.f, 10.f);
+	player.storeSize(20, 20);
+	player.setSpeed(2.0);
+	player.setPosition(10, 10);
+
 	Block fixedBlock[mBlock];
 
 	for(int x = 0; x < mBlock; x++) {
@@ -74,6 +86,7 @@ int main() {
 	tpBlock[0].linkBlocks(tpBlock[1]);
 	tpBlock[1].linkBlocks(tpBlock[0]);
 
+	//TODO: fix from here
 
 	float mvspeed = player.getMvSpeed();
 

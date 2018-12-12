@@ -75,8 +75,24 @@ public:
 
 class Entity
 {
+private:
+	float sizeX;
+	float sizeY;
+	float speed;
 public:
-	Entity(){};
+	Entity(): main(), hitbox() {};
+
+	MovingBlock main;
+	MovingBlock hitbox;
+
+	void setOrigin(float orX, float orY);
+
+	void storeSize(float x, float y);
+
+	void setSpeed(float speed);
+
+	void setPosition(int x, int y);
+
 };
 
 #endif

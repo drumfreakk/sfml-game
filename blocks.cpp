@@ -83,3 +83,24 @@ void TpBlock::teleport(Block &toTeleport, sf::Vector2f &pos){
 	TpBlock::teleport(toTeleport);
 	toTeleport.move(pos);
 }
+
+/// Entitys
+
+void Entity::setOrigin(float orX, float orY){
+	Entity::hitbox.setOrigin(orX, orY);
+	Entity::main.setOrigin(orX, orY);
+}
+
+void Entity::storeSize(float x, float y){
+	Entity::sizeX = x;
+	Entity::sizeY = y;
+}
+
+void Entity::setSpeed(float speed){
+	Entity::speed = speed;
+}
+
+void Entity::setPosition(int x, int y){
+	Entity::main.setPosition(x, y);
+	Entity::hitbox.setPosition(x, y);
+}
