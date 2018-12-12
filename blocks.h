@@ -73,4 +73,10 @@ public:
 	void teleport(Block &toTeleport, sf::Vector2f &pos);
 };
 
+class Entity
+{
+public:
+	Entity(){};
+};
+
 #endif
