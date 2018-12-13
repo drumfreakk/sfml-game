@@ -22,18 +22,7 @@ int main() {
 	window.setFramerateLimit(500);
 
 	sf::Texture texture;
-	texture.loadFromFile("/home/kip/CLionProjects/sfml-game/assets/textures.png");
-
-/*
-	MovingBlock player;
-
-	player.setTexture(texture);
-	player.setTextureRect(sf::IntRect(0, 0, 20, 20));
-	player.setOrigin(10.f, 10.f);
-	player.storeSize(20, 20);
-	player.setSpeed(2.0);
-	player.setPosition(10, 10);
-*/
+	texture.loadFromFile("/home/kip/CLionProjects/sfml-game/assets/textures.png"); 
 
 	Entity player;
 
@@ -141,20 +130,19 @@ int main() {
 			}
 		}
 
-//TODO: fix from here
 		toMv = false;
 
 		for(auto bl : fixedBlock){
-			if(bl.colliding(player)){
+			if(bl.colliding(hPlayer)){
 				toMv = true;
 			}
 		}
 		for(auto bl : mvBlock){
-			if(bl.colliding(player)){
+			if(bl.colliding(hPlayer)){
 				toMv = true;
 			}
 
-			if (bl.colliding(player, 1)) {
+			if (bl.colliding(hPlayer, 1)) {
 				if (bl.getSpeed().x > 0 && player.getPosition().x > bl.getPosition().x ||
 					bl.getSpeed().x < 0 && player.getPosition().x < bl.getPosition().x ||
 					bl.getSpeed().y > 0 && player.getPosition().y > bl.getPosition().y ||
@@ -167,16 +155,17 @@ int main() {
 		for(int x = 0; x < mTpBlock; x++) {
 			int setTpAble = 0;
 			for(int y = 0; y < mTpBlock; y++) {
-				if (!tpAble && !tpBlock[y].colliding(player)) {
+				if (!tpAble && !tpBlock[y].colliding(hPlayer)) {
 					setTpAble++;
 				}
 			}
 			if(setTpAble > mTpBlock -1){
 				tpAble = true;
 			}
-			if (tpBlock[x].colliding(player) && tpAble) {
+			if (tpBlock[x].colliding(hPlayer) && tpAble) {
 				tpAble = false;
-				tpBlock[x].teleport(player);
+				tpBlock[x].teleport(mPlayer);
+				tpBlock[x].teleport(hPlayer);
 			}
 		}
 

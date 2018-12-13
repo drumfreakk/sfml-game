@@ -79,11 +79,6 @@ void TpBlock::teleport(Block &toTeleport) {
 	}
 }
 
-void TpBlock::teleport(Block &toTeleport, sf::Vector2f &pos){
-	TpBlock::teleport(toTeleport);
-	toTeleport.move(pos);
-}
-
 /// Entitys
 
 void Entity::setOrigin(float orX, float orY){
@@ -92,8 +87,8 @@ void Entity::setOrigin(float orX, float orY){
 }
 
 void Entity::storeSize(float x, float y){
-	Entity::sizeX = x;
-	Entity::sizeY = y;
+	Entity::hitbox.storeSize(x, y);
+	Entity::main.storeSize(x, y);
 }
 
 void Entity::setSpeed(float speed){

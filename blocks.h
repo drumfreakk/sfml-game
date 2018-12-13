@@ -26,7 +26,6 @@ public:
 	bool colliding(Block &player);
 
 	bool colliding(Block &player, int margin);
-
 };
 
 class MovingBlock : public Block
@@ -70,14 +69,11 @@ public:
 
 	void teleport(Block &toTeleport);
 
-	void teleport(Block &toTeleport, sf::Vector2f &pos);
 };
 
 class Entity
 {
 private:
-	float sizeX;
-	float sizeY;
 	float speed;
 public:
 	Entity(): main(), hitbox() {};
