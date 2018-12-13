@@ -93,6 +93,12 @@ public:
 
 	void setPosition(int x, int y);
 
+	float getMvSpeed();
+
+	void move(sf::Vector2f mv);
+
+	sf::Vector2f getPosition();
+
 };
 
 #endif

@@ -104,3 +104,16 @@ void Entity::setPosition(int x, int y){
 	Entity::main.setPosition(x, y);
 	Entity::hitbox.setPosition(x, y);
 }
+
+float Entity::getMvSpeed(){
+	return Entity::speed;
+}
+
+void Entity::move(sf::Vector2f mv){
+	Entity::main.move(mv);
+	Entity::hitbox.move(mv);
+}
+
+sf::Vector2f Entity::getPosition(){
+	return Entity::hitbox.getPosition();
+}

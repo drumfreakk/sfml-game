@@ -86,8 +86,6 @@ int main() {
 	tpBlock[0].linkBlocks(tpBlock[1]);
 	tpBlock[1].linkBlocks(tpBlock[0]);
 
-	//TODO: fix from here
-
 	float mvspeed = player.getMvSpeed();
 
 	sf::Vector2f mv;
@@ -143,7 +141,7 @@ int main() {
 			}
 		}
 
-
+//TODO: fix from here
 		toMv = false;
 
 		for(auto bl : fixedBlock){
@@ -190,7 +188,7 @@ int main() {
 			player.move(mv);
 		}
 
-		window.draw(player);
+		window.draw(mPlayer);
 		for(const auto &todraw : fixedBlock){
 			window.draw(todraw);
 		}
