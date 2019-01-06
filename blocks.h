@@ -58,16 +58,16 @@ public:
 class TpBlock : public Block
 {
 private:
-	Block linkedBlock;
+	Block *linkedBlock = nullptr;
 	bool linked = false;
 public:
 	TpBlock(){};
 
-	void linkBlocks(Block &toLink);
+	bool linkBlocks(Block &toLink);
 
 	void unlinkBlocks();
 
-	void teleport(Block &toTeleport);
+	bool teleport(Block &toTeleport);
 
 };
 

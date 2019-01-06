@@ -62,21 +62,24 @@ float MovingBlock::getMvSpeed() {
 
 /// teleport blocks
 
-void TpBlock::linkBlocks(Block &toLink) {
-	if(!TpBlock::linked) {
-		TpBlock::linkedBlock = toLink;
-		TpBlock::linked = true;
+bool TpBlock::linkBlocks(Block &toLink) {
+	if(!linkedBlock) {
+		TpBlock::linkedBlock = &toLink;
+		return true;
 	}
+	return false;
 }
 
 void TpBlock::unlinkBlocks() {
-	TpBlock::linked = false;
+	TpBlock::linkedBlock = nullptr;
 }
 
-void TpBlock::teleport(Block &toTeleport) {
-	if(TpBlock::linked) {
-		toTeleport.setPosition(TpBlock::linkedBlock.getPosition());
+bool TpBlock::teleport(Block &toTeleport) {
+	if(linkedBlock) {
+		toTeleport.setPosition(TpBlock::linkedBlock->getPosition());
+		return true;
 	}
+	return false;
 }
 
 /// Entitys
